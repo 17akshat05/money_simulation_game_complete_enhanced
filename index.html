@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+<title>MoneySim Pro - Ultimate Enhanced</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Poppins:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: 'Poppins', sans-serif;
+    color: #e1e1e1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    user-select: none;
+  }
+  #game {
+    background: #162f40;
+    border-radius: 16px;
+    width: 350px;
+    max-height: 600px;
+    padding: 16px;
+    box-shadow: 0 8px 36px rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    margin: 0 0 14px 0;
+    font-size: 2rem;
+    color: #00ffcc;
+    text-align: center;
+    text-shadow: 0 0 7px #00ffcc;
+  }
+
+  #status-bar {
+    display: flex;
+    justify-content: space-around;
+    background: #203a43;
+    border-radius: 12px;
+    padding: 10px 0;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: inset 0 0 15px #00ffcc55;
+    flex-wrap: wrap;
+  }
+  #status-bar span {
+    flex-shrink: 0;
+    margin: 4px 6px;
+  }
+
+  #menu-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .menu-btn {
+    flex: 1 1 18%;
+    background: #008a75;
+    border: none;
+    border-radius: 10px;
+    margin: 2px 4px;
+    padding: 10px 6px;
+    color: #00332f;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 2px 10px #00ffcca0;
+    transition: background 0.3s ease, color 0.3s ease;
+    min-width: 45px;
+  }
+  .menu-btn.active, .menu-btn:hover {
+    background: #00ffcc;
+    color: #00332f;
+    box-shadow: 0 6px 15px #00ffcccc;
+  }
+
+  .tab-content {
+    flex-grow: 1;
+    background: #203a43;
+    border-radius: 12px;
+    padding: 15px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 15px #00ffcc55;
+    min-height: 240px;
+  }
+  .hidden {
+    display: none;
+  }
+
+  .tab-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  .tab-content::-webkit-scrollbar-track {
+    background: #162f40;
+    border-radius: 12px;
+  }
+  .tab-content::-webkit-scrollbar-thumb {
+    background: #00ffcc88;
+    border-radius: 12px;
+  }
+
+  #click-space {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #work-btn {
+    background: linear-gradient(135deg, #00ffcc, #008a75);
+    border: none;
+    border-radius: 14px;
+    color: #00332f;
+    font-weight: 700;
+    font-size: 1.4rem;
+    padding: 20px 50px;
+    margin-top: 20px;
+    user-select: none;
+    cursor: pointer;
+    box-shadow: 0 6px 25px #00ffccaa;
+    transition: background 0.3s ease, color 0.3s ease;
+    min-width: 210px;
+  }
+  #work-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #008a75, #00ffcc);
+    color: #001714;
+  }
+  #work-btn:disabled {
+    background: #004d3c88;
+    color: #00171488;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .item-list li {
+    background: #162f40;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 12px 15px;
+    box-shadow: 0 0 10px #00ffcc40 inset;
+    display: flex;
+    flex-direction: column;
+  }
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .item-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #00ffcc;
+    flex: 1 1 auto;
+    min-width: 140px;
+  }
+  .item-desc {
+    font-size: 0.85rem;
+    color: #a0fdf1;
+    margin-top: 4px;
+    flex-basis: 100%;
+  }
+  .item-details {
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #00e6b0cc;
+  }
+  .buy-btn {
+    background: #00ffcc;
+    border: none;
+    border-radius: 10px;
+    color: #00332f;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 10px 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px #00ffcca0;
+    transition: background 0.3s ease, color 0.3s ease;
+    min-width: 90px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+  .buy-btn:disabled {
+    background: #008a7555;
+    color: #00332f88;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .level-info {
+    font-size: 0.9rem;
+    color: #00ccaa;
+    font-weight: 600;
+  }
+
+  #log {
+    font-family: monospace;
+    font-size: 0.8rem;
+    max-height: 140px;
+    overflow-y: auto;
+    background: #162f40;
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow: inset 0 0 10px #00ffcc40;
+    margin-top: 10px;
+    line-height: 1.2;
+  }
+  #log p {
+    margin: 3px 0;
+  }
+
+  /* Rare boost button style */
+  #rare-boost-btn, #prestige-btn {
+    background: #ff6f00;
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    margin: 10px auto 0 auto;
+    cursor: pointer;
+    box-shadow: 0 4px 20px #ff6f0011;
+    transition: background 0.3s ease;
+    display: block;
+    min-width: 210px;
+  }
+  #rare-boost-btn:hover:not(:disabled), #prestige-btn:hover:not(:disabled) {
+    background: #ff8f24;
+  }
+  #rare-boost-btn:disabled, #prestige-btn:disabled {
+    background: #aa4e00cc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  #rare-boost-cooldown {
+    text-align: center;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: #ffb366;
+    font-weight: 600;
+    height: 22px;
+  }
+
+  #planet-level-container {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #00ffcc;
+  }
+
+  @media (max-width: 400px) {
+    #game {
+      width: 95vw;
+      height: 100vh;
+      max-height: 600px;
+      border-radius: 0;
+      padding: 12px;
+    }
+    #work-btn, #rare-boost-btn, #prestige-btn {
+      min-width: 170px;
+      font-size: 1rem;
+      padding: 12px 16px;
+      margin-bottom: 6px;
+    }
+    .buy-btn {
+      font-size: 0.9rem;
+      padding: 8px 14px;
+      min-width: 75px;
+      margin-left: 6px;
+    }
+    #menu-tabs {
+      margin-bottom: 12px;
+      gap: 6px;
+      justify-content: center;
+    }
+    .menu-btn {
+      flex: 1 1 28%;
+      min-width: 85px;
+      font-size: 0.75rem;
+      padding: 8px 0;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="game" role="main" aria-label="Money earning and spending simulation game">
+  <h1>MoneySim Pro</h1>
+  <div id="status-bar" aria-live="polite" aria-atomic="true">
+    <span>Planet: <strong id="status-planet">1</strong></span>
+    <span>Level: <strong id="status-level">1</strong></span>
+    <span>Money: $<strong id="status-money">0.00</strong></span>
+    <span>Earn/Click: $<strong id="status-earn-click">1.00</strong></span>
+    <span>Earn/Sec: $<strong id="status-earn-sec">0.00</strong></span>
+  </div>
+
+  <nav id="menu-tabs" role="tablist" aria-label="Game menu navigation">
+    <button class="menu-btn active" role="tab" aria-selected="true" aria-controls="click-space" id="tab-click-space" tabindex="0">Click Space</button>
+    <button class="menu-btn" role="tab" aria-selected="false" aria-controls="upgrades" id="tab-upgrades" tabindex="-1">Upgrades</button>
+    <button class="menu-btn" role="tab" aria-selected="false" aria-controls="shop" id="tab-shop" tabindex="-1">Shop</button>
+    <button class="menu-btn" role="tab" aria-selected="false" aria-controls="properties" id="tab-properties" tabindex="-1">Property Land</button>
+    <button class="menu-btn" role="tab" aria-selected="false" aria-controls="log-section" id="tab-log" tabindex="-1">Logs</button>
+  </nav>
+
+  <section id="click-space" class="tab-content" role="tabpanel" aria-labelledby="tab-click-space" tabindex="0">
+    <div style="text-align:center; font-size: 1.3rem; font-weight:600; margin-bottom: 8px; color:#00ffcc;">Earn Money By Working</div>
+    <button id="work-btn" aria-label="Work to earn money">Work</button>
+    <button id="rare-boost-btn" aria-label="Activate rare 10x boost" disabled title="Buy from shop to unlock">Rare 10x Earnings Boost</button>
+    <div id="rare-boost-cooldown" aria-live="polite" aria-atomic="true"></div>
+    <button id="prestige-btn" aria-label="Prestige to double earnings" hidden>Prestige (2x Earnings, Reset)</button>
+    <div id="planet-level-container"></div>
+  </section>
+
+  <section id="upgrades" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-upgrades" tabindex="-1">
+    <ul class="item-list" id="upgrades-list" aria-label="List of upgrades">
+    </ul>
+  </section>
+
+  <section id="shop" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-shop" tabindex="-1">
+    <ul class="item-list" id="shop-list" aria-label="Shop items to purchase">
+    </ul>
+  </section>
+
+  <section id="properties" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-properties" tabindex="-1">
+    <ul class="item-list" id="properties-list" aria-label="Property land to buy and upgrade">
+    </ul>
+  </section>
+
+  <section id="log-section" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-log" tabindex="-1">
+    <div id="log" aria-live="polite" aria-atomic="false">
+    </div>
+  </section>
+</div>
+
+<script>
+  (() => {
+    // Elements
+    const moneySpan = document.getElementById('status-money');
+    const levelSpan = document.getElementById('status-level');
+    const earnClickSpan = document.getElementById('status-earn-click');
+    const earnSecSpan = document.getElementById('status-earn-sec');
+    const planetSpan = document.getElementById('status-planet');
+
+    const workBtn = document.getElementById('work-btn');
+    const upgradesList = document.getElementById('upgrades-list');
+    const shopList = document.getElementById('shop-list');
+    const propertiesList = document.getElementById('properties-list');
+    const logElem = document.getElementById('log');
+
+    const rareBoostBtn = document.getElementById('rare-boost-btn');
+    const rareBoostCooldownElem = document.getElementById('rare-boost-cooldown');
+    const prestigeBtn = document.getElementById('prestige-btn');
+    const planetLevelContainer = document.getElementById('planet-level-container');
+
+    const tabs = Array.from(document.querySelectorAll('.menu-btn'));
+    const tabContents = Array.from(document.querySelectorAll('.tab-content'));
+
+    // Game state variables
+    let money = 0;
+    let level = 1;
+    let planetLevel = 1;
+    let prestigeCount = 0;
+    let earningsMultiplier = 1;
+
+    // Base earnings
+    let earnPerClickBase = 1;
+    let earnPerSecondBase = 0;
+
+    // Rare boost variables
+    let rareBoostPurchased = false;
+    let rareBoostActive = false;
+    let rareBoostCooldown = 0;
+    const rareBoostDuration = 5000; // 5 seconds active
+    const rareBoostCooldownTime = 15000; // 15 seconds cooldown
+    let cooldownInterval = null;
+
+    // Upgrade data structure
+    const upgradesData = [
+      {
+        id: 'click-power',
+        name: 'Click Power',
+        description: 'Increase money earned per click.',
+        baseCost: 10,
+        level: 0,
+        costMultiplier: 1.5,
+        effectPerLevel: 1,
+        maxLevel: 30
+      },
+      {
+        id: 'passive-income',
+        name: 'Passive Income',
+        description: 'Earn money automatically every second.',
+        baseCost: 50,
+        level: 0,
+        costMultiplier: 2,
+        effectPerLevel: 0.5,
+        maxLevel: 30,
+        unlockLevel: 3
+      },
+      {
+        id: 'automation',
+        name: 'Automation',
+        description: 'Work automatically every 4 seconds.',
+        baseCost: 200,
+        level: 0,
+        costMultiplier: 3,
+        effectPerLevel: 1,
+        maxLevel: 15,
+        unlockLevel: 5
+      },
+      {
+        id: 'turbo-charged-clicks',
+        name: 'Turbo Charged Clicks',
+        description: 'Boost click earnings by 25% per level.',
+        baseCost: 500,
+        level: 0,
+        costMultiplier: 2.5,
+        effectPerLevel: 0.25,
+        maxLevel: 20,
+        unlockLevel: 7
+      },
+      {
+        id: 'super-passive',
+        name: 'Super Passive Income',
+        description: 'Boost passive income by 40% per level.',
+        baseCost: 750,
+        level: 0,
+        costMultiplier: 3,
+        effectPerLevel: 0.40,
+        maxLevel: 20,
+        unlockLevel: 8
+      },
+      {
+        id: 'mega-turbo-clicks',
+        name: 'Mega Turbo Clicks',
+        description: 'Further boost click earnings by 50% per level.',
+        baseCost: 1500,
+        level: 0,
+        costMultiplier: 3,
+        effectPerLevel: 0.5,
+        maxLevel: 20,
+        unlockLevel: 20
+      },
+      {
+        id: 'ultra-passive',
+        name: 'Ultra Passive Income',
+        description: 'Further boost passive income by 75% per level.',
+        baseCost: 2000,
+        level: 0,
+        costMultiplier: 3,
+        effectPerLevel: 0.75,
+        maxLevel: 20,
+        unlockLevel: 25
+      }
+    ];
+
+    // Shop items
+    const shopItemsData = [
+      {
+        id: 'coffee-machine',
+        name: 'Coffee Machine',
+        description: 'Doubles your passive income.',
+        cost: 100,
+        purchased: false,
+        unlockLevel: 4
+      },
+      {
+        id: 'laptop',
+        name: 'High-End Laptop',
+        description: 'Increases click power by 50%.',
+        cost: 250,
+        purchased: false,
+        unlockLevel: 6
+      },
+      {
+        id: 'premium-office',
+        name: 'Premium Office',
+        description: 'Boosts automation efficiency by 2x.',
+        cost: 1200,
+        purchased: false,
+        unlockLevel: 9
+      },
+      {
+        id: 'rare-boost',
+        name: 'Rare 10x Earnings Boost',
+        description: 'Activate a 10x earnings boost for 5 seconds.',
+        cost: 1500,
+        purchased: false,
+        unlockLevel: 10
+      },
+      {
+        id: 'quantum-computer',
+        name: 'Quantum Computer',
+        description: 'Boosts turbo clicks by 2x.',
+        cost: 7500,
+        purchased: false,
+        unlockLevel: 30
+      }
+    ];
+
+    // Properties data
+    const propertiesData = [
+      {
+        id: 'small-land',
+        name: 'Small Land',
+        description: 'Increases both click and passive income by 10% each per property.',
+        cost: 500,
+        owned: 0,
+        maxOwn: 10,
+        boostPercent: 0.10,
+        unlockLevel: 4
+      },
+      {
+        id: 'farm',
+        name: 'Farm',
+        description: 'Increases passive income by 50% per property.',
+        cost: 1200,
+        owned: 0,
+        maxOwn: 5,
+        boostPercent: 0.50,
+        unlockLevel: 6
+      },
+      {
+        id: 'industrial-park',
+        name: 'Industrial Park',
+        description: 'Boosts both click and passive income by 80% per property.',
+        cost: 5000,
+        owned: 0,
+        maxOwn: 3,
+        boostPercent: 0.80,
+        unlockLevel: 10
+      },
+      {
+        id: 'space-station',
+        name: 'Space Station',
+        description: 'Boosts automation efficiency by 100% per property.',
+        cost: 20000,
+        owned: 0,
+        maxOwn: 2,
+        boostPercent: 1.00,
+        unlockLevel: 50
+      },
+      {
+        id: 'orbital-planet',
+        name: 'Orbital Planet',
+        description: 'Boosts all earnings by 150% per property.',
+        cost: 100000,
+        owned: 0,
+        maxOwn: 1,
+        boostPercent: 1.50,
+        unlockLevel: 80
+      }
+    ];
+
+    // Game intervals tracking
+    let passiveIncomeInterval = null;
+    let automationInterval = null;
+    let automationEnabled = false;
+
+    // Logging helper
+    function log(text) {
+      const p = document.createElement('p');
+      p.textContent = text;
+      logElem.prepend(p);
+      if (logElem.children.length > 80) {
+        logElem.removeChild(logElem.lastChild);
+      }
+    }
+
+    // Tab switch handler
+    function switchTab(targetId) {
+      tabs.forEach(btn => {
+        const selected = btn.getAttribute('aria-controls') === targetId;
+        btn.classList.toggle('active', selected);
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        btn.tabIndex = selected ? 0 : -1;
+      });
+      tabContents.forEach(section => {
+        const show = section.id === targetId;
+        section.classList.toggle('hidden', !show);
+        section.tabIndex = show ? 0 : -1;
+        if (show) section.focus();
+      });
+    }
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchTab(btn.getAttribute('aria-controls'));
+      });
+      btn.addEventListener('keyup', e => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          let idx = tabs.indexOf(e.target);
+          if (e.key === 'ArrowRight') idx = (idx + 1) % tabs.length;
+          else idx = (idx - 1 + tabs.length) % tabs.length;
+          tabs[idx].focus();
+        }
+      });
+    });
+
+    function calculateEffectiveClickEarnings() {
+      let baseClick = earnPerClickBase;
+
+      // Click Power upgrades
+      const clickPowerUpgrade = upgradesData.find(u => u.id === 'click-power');
+      if (clickPowerUpgrade) baseClick += clickPowerUpgrade.level * clickPowerUpgrade.effectPerLevel;
+
+      // Turbo Charged Clicks
+      const turboClicks = upgradesData.find(u => u.id === 'turbo-charged-clicks');
+      let turboMultiplier = 1;
+      if (turboClicks) turboMultiplier += turboClicks.level * turboClicks.effectPerLevel;
+
+      // Mega Turbo Clicks
+      const megaTurboClicks = upgradesData.find(u => u.id === 'mega-turbo-clicks');
+      if (megaTurboClicks) turboMultiplier += megaTurboClicks.level * megaTurboClicks.effectPerLevel;
+
+      baseClick *= turboMultiplier;
+
+      // Laptop boost
+      const laptop = shopItemsData.find(i => i.id === 'laptop' && i.purchased);
+      if (laptop) baseClick *= 1.5;
+
+      // Properties boost click income
+      propertiesData.forEach(prop => {
+        baseClick *= (1 + (prop.boostPercent * prop.owned));
+      });
+
+      // Orbital Planet boost (all earnings)
+      const orbitalPlanet = propertiesData.find(p => p.id === 'orbital-planet');
+      if (orbitalPlanet && orbitalPlanet.owned > 0) {
+        baseClick *= (1 + orbitalPlanet.boostPercent * orbitalPlanet.owned);
+      }
+
+      // Rare boost multiplier (if active)
+      if (rareBoostActive) baseClick *= 10;
+
+      // Planet multiplier
+      baseClick *= earningsMultiplier;
+
+      return baseClick;
+    }
+
+    function calculateEffectivePassiveIncome() {
+      let basePassive = earnPerSecondBase;
+
+      const passiveIncomeUpgrade = upgradesData.find(u => u.id === 'passive-income');
+      if (passiveIncomeUpgrade) basePassive += passiveIncomeUpgrade.level * passiveIncomeUpgrade.effectPerLevel;
+
+      const superPassive = upgradesData.find(u => u.id === 'super-passive');
+      if (superPassive) basePassive *= (1 + superPassive.level * superPassive.effectPerLevel);
+
+      const ultraPassive = upgradesData.find(u => u.id === 'ultra-passive');
+      if (ultraPassive) basePassive *= (1 + ultraPassive.level * ultraPassive.effectPerLevel);
+
+      const coffeeMachine = shopItemsData.find(i => i.id === 'coffee-machine' && i.purchased);
+      if (coffeeMachine) basePassive *= 2;
+
+      propertiesData.forEach(prop => {
+        basePassive *= (1 + (prop.boostPercent * prop.owned));
+      });
+
+      // Orbital Planet boost (all earnings)
+      const orbitalPlanet = propertiesData.find(p => p.id === 'orbital-planet');
+      if (orbitalPlanet && orbitalPlanet.owned > 0) {
+        basePassive *= (1 + orbitalPlanet.boostPercent * orbitalPlanet.owned);
+      }
+
+      if (rareBoostActive) basePassive *= 10;
+
+      basePassive *= earningsMultiplier;
+
+      return basePassive;
+    }
+
+    function calculateAutomationMultiplier() {
+      let multiplier = 1;
+      const premiumOffice = shopItemsData.find(i => i.id === 'premium-office' && i.purchased);
+      if (premiumOffice) multiplier = 2;
+      // Space Station properties (automation boost)
+      const spaceStation = propertiesData.find(p => p.id === 'space-station');
+      if (spaceStation && spaceStation.owned > 0) {
+        multiplier += spaceStation.boostPercent * spaceStation.owned;
+      }
+      multiplier *= earningsMultiplier;
+      return multiplier;
+    }
+
+    function updateStatusBar() {
+      moneySpan.textContent = money.toFixed(2);
+      levelSpan.textContent = level;
+      planetSpan.textContent = planetLevel;
+
+      const clickEarn = calculateEffectiveClickEarnings();
+      const passiveEarn = calculateEffectivePassiveIncome();
+
+      earnClickSpan.textContent = clickEarn.toFixed(2);
+      earnSecSpan.textContent = passiveEarn.toFixed(2);
+
+      workBtn.disabled = false;
+
+      updateUpgradeButtons();
+      updateShopButtons();
+      updatePropertyButtons();
+      updateRareBoostButton();
+      updatePrestigeButton();
+      updatePlanetDisplay();
+    }
+
+    // Renders upgrades list
+    function renderUpgrades() {
+      upgradesList.innerHTML = '';
+      upgradesData.forEach(upgrade => {
+        if (upgrade.unlockLevel && level < upgrade.unlockLevel) return;
+
+        const cost = upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level);
+        const maxedOut = upgrade.level >= upgrade.maxLevel;
+        const afford = money >= cost && !maxedOut;
+
+        const li = document.createElement('li');
+        li.setAttribute('role', 'listitem');
+        li.innerHTML = `
+          <div class="item-row">
+            <div class="item-title">${upgrade.name}</div>
+            <button class="buy-btn" ${afford ? '' : 'disabled'} title="Cost $${cost.toFixed(2)}">$${cost.toFixed(2)}</button>
+          </div>
+          <div class="item-desc">${upgrade.description}</div>
+          <div class="item-details">Level: ${upgrade.level} / ${upgrade.maxLevel}${maxedOut ? ' (MAX)' : ''}</div>
+        `;
+        const buyBtn = li.querySelector('button.buy-btn');
+        buyBtn.onclick = () => buyUpgrade(upgrade.id);
+        upgradesList.appendChild(li);
+      });
+    }
+
+    function updateUpgradeButtons() {
+      upgradesData.forEach(upgrade => {
+        if (upgrade.unlockLevel && level < upgrade.unlockLevel) return;
+        const cost = upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level);
+        const maxedOut = upgrade.level >= upgrade.maxLevel;
+        const afford = money >= cost && !maxedOut;
+        for (let li of upgradesList.querySelectorAll('li')) {
+          if (li.querySelector('.item-title').textContent === upgrade.name) {
+            const buyBtn = li.querySelector('button.buy-btn');
+            if (buyBtn) buyBtn.disabled = !afford;
+          }
+        }
+      });
+    }
+
+    // Renders shop list
+    function renderShop() {
+      shopList.innerHTML = '';
+      shopItemsData.forEach(item => {
+        if (item.unlockLevel && level < item.unlockLevel) return;
+        const afford = money >= item.cost && !item.purchased;
+
+        const li = document.createElement('li');
+        li.setAttribute('role', 'listitem');
+        li.innerHTML = `
+          <div class="item-row">
+            <div class="item-title">${item.name}</div>
+            <button class="buy-btn" ${afford ? '' : 'disabled'}>${item.purchased ? 'Purchased' : `Buy $${item.cost.toFixed(2)}`}</button>
+          </div>
+          <div class="item-desc">${item.description}</div>
+        `;
+        const buyBtn = li.querySelector('button.buy-btn');
+        buyBtn.onclick = () => buyShopItem(item.id);
+        shopList.appendChild(li);
+      });
+    }
+
+    function updateShopButtons() {
+      shopItemsData.forEach(item => {
+        if (item.unlockLevel && level < item.unlockLevel) return;
+        const afford = money >= item.cost && !item.purchased;
+        for (let li of shopList.querySelectorAll('li')) {
+          if (li.querySelector('.item-title').textContent === item.name) {
+            const buyBtn = li.querySelector('button.buy-btn');
+            if (buyBtn) {
+              buyBtn.disabled = !afford;
+              buyBtn.textContent = item.purchased ? 'Purchased' : `Buy $${item.cost.toFixed(2)}`;
+            }
+          }
+        }
+      });
+    }
+
+    // Renders properties list
+    function renderProperties() {
+      propertiesList.innerHTML = '';
+      propertiesData.forEach(prop => {
+        if (prop.unlockLevel && level < prop.unlockLevel) return;
+        const canBuyMore = prop.owned < prop.maxOwn;
+        const afford = money >= prop.cost && canBuyMore;
+
+        const li = document.createElement('li');
+        li.setAttribute('role', 'listitem');
+        li.innerHTML = `
+          <div class="item-row">
+            <div class="item-title">${prop.name}</div>
+            <button class="buy-btn" ${afford ? '' : 'disabled'}>${canBuyMore ? `Buy $${prop.cost.toFixed(2)}` : 'Max Owned'}</button>
+          </div>
+          <div class="item-desc">${prop.description}</div>
+          <div class="item-details">Owned: ${prop.owned} / ${prop.maxOwn}</div>
+        `;
+        const buyBtn = li.querySelector('button.buy-btn');
+        buyBtn.onclick = () => buyProperty(prop.id);
+        propertiesList.appendChild(li);
+      });
+    }
+
+    function updatePropertyButtons() {
+      propertiesData.forEach(prop => {
+        if (prop.unlockLevel && level < prop.unlockLevel) return;
+        const canBuyMore = prop.owned < prop.maxOwn;
+        const afford = money >= prop.cost && canBuyMore;
+        for (let li of propertiesList.querySelectorAll('li')) {
+          if (li.querySelector('.item-title').textContent === prop.name) {
+            const buyBtn = li.querySelector('button.buy-btn');
+            if (buyBtn) {
+              buyBtn.disabled = !afford;
+              buyBtn.textContent = canBuyMore ? `Buy $${prop.cost.toFixed(2)}` : 'Max Owned';
+            }
+          }
+        }
+      });
+    }
+
+    // Buy upgrade function
+    function buyUpgrade(id) {
+      const upgrade = upgradesData.find(u => u.id === id);
+      if (!upgrade) return;
+      if (upgrade.unlockLevel && level < upgrade.unlockLevel) {
+        log(`Upgrade "${upgrade.name}" not unlocked yet.`);
+        return;
+      }
+      if (upgrade.level >= upgrade.maxLevel) {
+        log(`Upgrade "${upgrade.name}" is already at max level.`);
+        return;
+      }
+      const cost = upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level);
+      if (money >= cost) {
+        money -= cost;
+        upgrade.level++;
+        log(`Bought upgrade: ${upgrade.name} (Level ${upgrade.level}) for $${cost.toFixed(2)}`);
+        recalcEarnings();
+        renderUpgrades();
+        updateStatusBar();
+      } else {
+        log(`Not enough money to buy: ${upgrade.name} (cost $${cost.toFixed(2)})`);
+      }
+    }
+
+    // Buy shop item function
+    function buyShopItem(id) {
+      const item = shopItemsData.find(i => i.id === id);
+      if (!item) return;
+      if (item.purchased) {
+        log(`${item.name} already purchased.`);
+        return;
+      }
+      if (money >= item.cost) {
+        money -= item.cost;
+        item.purchased = true;
+        log(`Bought shop item: ${item.name} for $${item.cost.toFixed(2)}`);
+        if (item.id === 'rare-boost') {
+          rareBoostPurchased = true;
+          updateRareBoostButton();
+        }
+        recalcEarnings();
+        renderShop();
+        updateStatusBar();
+      } else {
+        log(`Not enough money to buy shop item: ${item.name} ($${item.cost.toFixed(2)})`);
+      }
+    }
+
+    // Buy property function
+    function buyProperty(id) {
+      const prop = propertiesData.find(p => p.id === id);
+      if (!prop) return;
+      if (prop.owned >= prop.maxOwn) {
+        log(`Max owned for property: ${prop.name}`);
+        return;
+      }
+      if (money >= prop.cost) {
+        money -= prop.cost;
+        prop.owned++;
+        log(`Bought property: ${prop.name} (Owned ${prop.owned}) for $${prop.cost.toFixed(2)}`);
+        recalcEarnings();
+        renderProperties();
+        updateStatusBar();
+      } else {
+        log(`Not enough money to buy property: ${prop.name} ($${prop.cost.toFixed(2)})`);
+      }
+    }
+
+    // Calculate earnings and manage intervals
+    function recalcEarnings() {
+      earnPerClickBase = 1;
+      earnPerSecondBase = 0;
+
+      const clickPowerUpgrade = upgradesData.find(u => u.id === 'click-power');
+      if (clickPowerUpgrade) earnPerClickBase += clickPowerUpgrade.level * clickPowerUpgrade.effectPerLevel;
+
+      const passiveIncomeUpgrade = upgradesData.find(u => u.id === 'passive-income');
+      if (passiveIncomeUpgrade) earnPerSecondBase += passiveIncomeUpgrade.level * passiveIncomeUpgrade.effectPerLevel;
+
+      if (passiveIncomeUpgrade && passiveIncomeUpgrade.level > 0 && level >= 3) {
+        startPassiveIncome();
+      } else {
+        stopPassiveIncome();
+      }
+
+      let automationUpgrade = upgradesData.find(u => u.id === 'automation');
+      if (automationUpgrade && automationUpgrade.level > 0 && level >= 5) {
+        if (!automationEnabled) {
+          enableAutomation();
+        } else {
+          updateAutomationInterval();
+        }
+      } else {
+        disableAutomation();
+      }
+    }
+
+    function startPassiveIncome() {
+      if (passiveIncomeInterval) return;
+      passiveIncomeInterval = setInterval(() => {
+        const income = calculateEffectivePassiveIncome();
+        if (income > 0) {
+          money += income;
+          updateStatusBar();
+          log(`Passive income earned $${income.toFixed(2)}`);
+          checkLevelUp();
+        }
+      }, 1000);
+    }
+    function stopPassiveIncome() {
+      if (passiveIncomeInterval) {
+        clearInterval(passiveIncomeInterval);
+        passiveIncomeInterval = null;
+      }
+    }
+
+    function enableAutomation() {
+      if (automationEnabled) return;
+      automationEnabled = true;
+      updateAutomationInterval();
+      log("Automation enabled!");
+    }
+
+    function disableAutomation() {
+      if (automationInterval) {
+        clearInterval(automationInterval);
+        automationInterval = null;
+      }
+      automationEnabled = false;
+      log("Automation disabled!");
+    }
+
+    function updateAutomationInterval() {
+      if (automationInterval) clearInterval(automationInterval);
+      const automationUpgrade = upgradesData.find(u => u.id === 'automation');
+      if (!automationEnabled || !automationUpgrade) return;
+      const multiplier = calculateAutomationMultiplier();
+      const intervalTime = 4000 / multiplier;
+      automationInterval = setInterval(() => {
+        const clickEarn = calculateEffectiveClickEarnings();
+        money += clickEarn;
+        updateStatusBar();
+        log(`Automated work earned $${clickEarn.toFixed(2)}`);
+        checkLevelUp();
+      }, intervalTime);
+    }
+
+    // Work button action
+    workBtn.addEventListener('click', () => {
+      money += calculateEffectiveClickEarnings();
+      updateStatusBar();
+      log(`Worked and earned $${calculateEffectiveClickEarnings().toFixed(2)}`);
+      checkLevelUp();
+    });
+
+    // Rare boost button action
+    rareBoostBtn.addEventListener('click', () => {
+      if (!rareBoostPurchased) return;
+      if (rareBoostActive || rareBoostCooldown > 0) return;
+
+      rareBoostActive = true;
+      rareBoostBtn.disabled = true;
+      rareBoostCooldown = rareBoostCooldownTime;
+      rareBoostCooldownElem.textContent = 'Boost active for 5 seconds!';
+
+      log('Rare 10x Earnings Boost ACTIVATED!');
+      updateStatusBar();
+
+      setTimeout(() => {
+        rareBoostActive = false;
+        rareBoostCooldownElem.textContent = 'Boost on cooldown...';
+        log('Rare 10x Earnings Boost ENDED.');
+        updateStatusBar();
+        startCooldownTimer();
+      }, rareBoostDuration);
+    });
+
+    function startCooldownTimer() {
+      if (cooldownInterval) clearInterval(cooldownInterval);
+      cooldownInterval = setInterval(() => {
+        rareBoostCooldown -= 1000;
+        if (rareBoostCooldown <= 0) {
+          rareBoostCooldown = 0;
+          rareBoostCooldownElem.textContent = 'Boost ready!';
+          rareBoostBtn.disabled = false;
+          clearInterval(cooldownInterval);
+          cooldownInterval = null;
+        } else {
+          rareBoostCooldownElem.textContent = `Boost cooldown: ${Math.ceil(rareBoostCooldown / 1000)}s`;
+        }
+      }, 1000);
+    }
+
+    function updateRareBoostButton() {
+      if (rareBoostPurchased) {
+        rareBoostBtn.disabled = rareBoostActive || rareBoostCooldown > 0;
+        if (rareBoostCooldown === 0) rareBoostCooldownElem.textContent = 'Boost ready!';
+      } else {
+        rareBoostBtn.disabled = true;
+        rareBoostCooldownElem.textContent = '';
+      }
+    }
+
+    // Prestige (reset) button
+    prestigeBtn.addEventListener('click', () => {
+      if (level < 100) {
+        alert('You need to reach Level 100 to Prestige.');
+        return;
+      }
+
+      if (!canBuyPlanet) {
+        alert('You need to buy a planet to unlock Prestige.');
+        return;
+      }
+
+      if (!confirm('Are you sure you want to Prestige? You will reset your progress but earn 2x from now on!')) return;
+
+      prestige();
+    });
+
+    // Planet purchase button function (shown on UI as special shop item for restart permit)
+    let canBuyPlanet = false;
+    const planetCostBase = 100000 * 2; // Base planet cost doubled per prestige level
+    function canAffordPlanet() {
+      return money >= getPlanetCost();
+    }
+    function getPlanetCost() {
+      return 100000 * planetLevel * 2;
+    }
+    function buyPlanet() {
+      const cost = getPlanetCost();
+      if (money < cost) {
+        alert('Not enough money to buy a planet.');
+        return;
+      }
+      money -= cost;
+      planetLevel++;
+      canBuyPlanet = true;
+      updatePlanetDisplay();
+      log(`You bought Planet #${planetLevel}. You can now Prestige to restart with 2x earnings.`);
+      updateStatusBar();
+      renderPlanetInfo();
+    }
+
+    function renderPlanetInfo() {
+      planetLevelContainer.innerHTML = `Planet Level: ${planetLevel} <button id="buy-planet-btn">Buy Next Planet ($${getPlanetCost().toLocaleString()})</button>`;
+      const buyPlanetBtn = document.getElementById('buy-planet-btn');
+      if (buyPlanetBtn) buyPlanetBtn.onclick = buyPlanet;
+      buyPlanetBtn.disabled = !canAffordPlanet();
+    }
+
+    // prestige logic - reset progress but keep multiplier and increase prestige count
+    function prestige() {
+      prestigeCount++;
+      earningsMultiplier = Math.pow(2, prestigeCount);
+      log(`Prestige activated! Earnings multiplier: ${earningsMultiplier}x`);
+
+      // Reset money, level, upgrades, shop, properties etc
+      money = 0;
+      level = 1;
+
+      upgradesData.forEach(u => u.level = 0);
+      shopItemsData.forEach(i => i.purchased = false);
+      propertiesData.forEach(p => p.owned = 0);
+
+      rareBoostPurchased = false;
+      rareBoostActive = false;
+      rareBoostCooldown = 0;
+
+      canBuyPlanet = false;
+
+      prestigeBtn.hidden = true;
+      renderPlanetInfo();
+      recalcEarnings();
+      renderUpgrades();
+      renderShop();
+      renderProperties();
+      updateStatusBar();
+
+      alert('Game reset with prestige multiplier applied! Earn double now!');
+    }
+
+    // Update prestige button visibility & enabled state
+    function updatePrestigeButton() {
+      if (level >= 100 && canBuyPlanet) {
+        prestigeBtn.hidden = false;
+        prestigeBtn.disabled = false;
+      } else {
+        prestigeBtn.hidden = true;
+      }
+    }
+
+    // Update planet display & buy button enable
+    function updatePlanetDisplay() {
+      if (planetLevelContainer.innerHTML === '') renderPlanetInfo();
+      const buyPlanetBtn = document.getElementById('buy-planet-btn');
+      if (buyPlanetBtn) buyPlanetBtn.disabled = !canAffordPlanet();
+      planetSpan.textContent = planetLevel;
+    }
+
+    // Level up logic with option to prestige on level 100+
+    function checkLevelUp() {
+      let leveledUp = false;
+      while (money >= level * 100) {
+        money -= level * 100;
+        level++;
+        leveledUp = true;
+        log(`!!! LEVEL UP !!! You reached Level ${level}`);
+
+        switch(level) {
+          case 3:
+            log('Passive income feature unlocked! Purchase Passive Income upgrades in Upgrades tab.');
+            break;
+          case 4:
+            log('Shop and Property Land unlocked!');
+            break;
+          case 5:
+            log('Automation unlocked! Buy upgrades to automate work.');
+            break;
+          case 7:
+            log('New powerful upgrades unlocked: Turbo Charged Clicks!');
+            break;
+          case 8:
+            log('Super Passive Income upgrade available!');
+            break;
+          case 9:
+            log('Premium Office shop item available - doubles automation speed!');
+            break;
+          case 10:
+            log('Rare 10x Earnings Boost shop item available!');
+            break;
+          case 20:
+            log('Mega Turbo Clicks upgrades now available!');
+            break;
+          case 25:
+            log('Ultra Passive Income upgrades now available!');
+            break;
+          case 50:
+            log('Space Station property unlocked! Boost automation!');
+            break;
+          case 80:
+            log('Orbital Planet property unlocked! Massive earnings boost!');
+            break;
+          case 100:
+            log('Level 100 reached! You can now buy planets to Prestige and earn double.');
+            updatePrestigeButton();
+            break;
+          default:
+            if(level > 100) log('Keep building your empire!');
+        }
+      }
+      if (leveledUp) {
+        renderUpgrades();
+        renderShop();
+        renderProperties();
+        updateStatusBar();
+        updatePrestigeButton();
+      }
+    }
+
+    // Initial setup & render
+    renderUpgrades();
+    renderShop();
+    renderProperties();
+    recalcEarnings();
+    updateStatusBar();
+    updatePrestigeButton();
+    renderPlanetInfo();
+
+    document.getElementById('click-space').focus();
+    log('Welcome to MoneySim Pro! Press "Work" to start earning money.');
+
+  })();
+</script>
+</body>
+</html>
+</content>
+</create_file>
+
+<attempt_completion>
+The game now includes substantial new features while maintaining existing mechanics:
+
+- Many more properties unlocked at increasing levels, providing progressive boosts.
+- Additional powerful upgrades and shop boosts introduced.
+- Upon reaching level 100, players can buy planets (for a cost increasing with planet level).
+- Owning a planet unlocks a "Prestige" button which resets the game to level 1 but doubles all earnings permanently, stacking with each prestige.
+- Clear UI elements and logs help track progress, boosts, and options.
+- All prior features like rare boosts, automation, and upgrades continue to function seamlessly.
+- The interface remains clean, mobile responsive, and polished.
+
+Open this HTML file in a modern browser to start playing the enhanced MoneySim Pro! Let me know if you'd like me to add tutorials, save/load, or further polish any part.
+</attempt_completion>
