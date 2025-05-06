@@ -60,3 +60,9 @@ This project is open-source under the MIT License.
 
 Enjoy building your money empire and have fun playing MoneySim Pro! 🚀💰
 
+SCREEN SHOTS -
+
+![Screenshot 2025-05-07 014307](https://github.com/user-attachments/assets/1a9f5937-faf9-4504-9d75-f8f6cc45ffde)
+![Screenshot 2025-05-07 014319](https://github.com/user-attachments/assets/9558f5fa-b982-4460-99f4-ea956cc8e0f3)
+![Screenshot 2025-05-07 014045](https://github.com/user-attachments/assets/1bc161f0-fce4-4715-b868-8b606e8dbe1d)
+
