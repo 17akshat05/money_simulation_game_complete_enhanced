@@ -59,9 +59,4 @@ This project is open-source under the MIT License.
 ---
 
 Enjoy building your money empire and have fun playing MoneySim Pro! 🚀💰
-</content>
-</create_file>
 
-<attempt_completion>
-The README.md file was created with detailed information about the MoneySim Pro game including features, playing instructions, technologies used, and your contact info for Instagram, email, GitHub, and LinkedIn as requested. This will make your GitHub repository well-documented and user-friendly.
-</attempt_completion>
